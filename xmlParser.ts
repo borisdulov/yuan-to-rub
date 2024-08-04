@@ -13,7 +13,7 @@ interface valute {
   Value: string;
 }
 
-export const YuanToRub = async (): Promise<string | null> => {
+export const ValuteToRub = async (targetCharCode: string): Promise<string | null> => {
   try {
     const response = await fetch(cbrApiUrl);
     if (!response.ok) {
@@ -25,11 +25,11 @@ export const YuanToRub = async (): Promise<string | null> => {
     if (!xmlObj.ValCurs.Valute) {
       throw new Error("Invalid XML format");
     }
-    const yuan = xmlObj.ValCurs.Valute.find((valute) => valute.CharCode === "CNY");
-    if (!yuan || !yuan.Value) {
+    const valute = xmlObj.ValCurs.Valute.find((valute) => valute.CharCode === targetCharCode);
+    if (!valute || !valute.Value) {
       throw new Error(`Yuan not found in XML data`);
     }
-    return yuan.Value;
+    return valute.Value;
   } catch (error) {
     console.error(error);
     return null;
